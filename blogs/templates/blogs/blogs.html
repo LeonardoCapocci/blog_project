@@ -2,6 +2,7 @@
 
 {% block content %}
   <p>Blogs:</p>
+  <p><a href="{% url 'blogs:new_blog' %}">Start new blog!</a></p>
   <ul>
     {% for blog in blogs %}
       <li>
