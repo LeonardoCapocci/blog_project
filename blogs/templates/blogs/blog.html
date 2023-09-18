@@ -4,6 +4,7 @@
 
   <p>{{ blog.title }}</p>
   <p>Posts:</p>
+  <p><a href="{% url 'blogs:new_post' blog.id %}">Add new post!</a></p>
   <ul>
     
     {% for post in posts %}
