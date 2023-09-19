@@ -3,4 +3,9 @@
 {% block content %}
   <p>Blogiverse allows you to blog about specific or very general topics you're 
   interested in or want to share</p>
+  <p>- Blog posts appear in order of most recent</p>
+  {% for post in posts %}
+    <p>{{ post.blog }} - ({{ post.date_added }})</p>
+    <p>- {{ post }}</p>
+  {% endfor %}
 {% endblock content %}

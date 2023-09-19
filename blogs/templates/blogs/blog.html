@@ -2,14 +2,16 @@
 
 {% block content %}
 
-  <p>{{ blog.title }}</p>
+  <p>{{ blog.title }} - 
+    <a href="{% url 'blogs:delete_blog' blog.id %}">Delete blog</a></p>
   <p>Posts:</p>
   <p><a href="{% url 'blogs:new_post' blog.id %}">Add new post!</a></p>
   <ul>
     
     {% for post in posts %}
       <li>
-        <p>{{ post.date_added|date:'M d, Y h:i' }}</p>
+        <p>{{ post.date_added|date:'M d, Y h:i' }} - 
+          <a href="{% url 'blogs:edit_post' post.id %}">Edit post</a></p>
         <p>{{ post.text|linebreaks }}</p>
       </li>
     {% empty %}

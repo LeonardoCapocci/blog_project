@@ -1,0 +1,12 @@
+{% extends 'blogs/base.html' %}
+
+
+{% block content %}
+  <p>Delete blog: {{ blog.title }}</p>
+  <p>The entire blog including all posts associated with it will be deleted.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button name="delete">DELETE</button>
+  </form>
+  <p><a href="{% url 'blogs:blog' blog.id %}">Cancel</a></p>
+{% endblock content %}

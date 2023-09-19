@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect
-from .models import Blog
+from django.contrib.auth.decorators import login_required
+from .models import Blog, Post
 from .forms import BlogForm, PostForm
+
 
 # Create your views here.
 def index(request):
     """The home page for blogs."""
-    return render(request, 'blogs/index.html')
+    posts = Post.objects.order_by('-date_added')
+    context = {'posts':posts}
+    return render(request, 'blogs/index.html', context)
 
 def blogs(request):
     """The blogs page."""
@@ -54,3 +58,40 @@ def new_post(request, blog_id):
     # Display a blank or invalid form
     context = {'blog': blog, 'form': form}
     return render(request, 'blogs/new_post.html', context)
+
+def edit_post(request, post_id):
+    """Edit a particular post."""
+    post = Post.objects.get(id=post_id)
+    blog = post.blog
+
+    if request.method != 'POST':
+        # Initial request; pre-fill form with the current post.
+        form = PostForm(instance=post)
+    else:
+        # Post data submitted
+        form = PostForm(instance=post, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('blogs:blog', blog_id=blog.id)
+    
+    context = {'post':post, 'blog':blog, 'form':form}
+    return render(request, 'blogs/edit_post.html', context)
+
+def delete_blog(request, blog_id):
+    """Delete a blog."""
+    blog = Blog.objects.get(id=blog_id)
+    if request.method == 'POST':
+        blog.delete()
+        return redirect('blogs:blogs')
+    context = {'blog':blog}
+    return render(request, 'blogs/delete_blog.html', context)
+
+def delete_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    blog = post.blog
+    if request.method == 'POST':
+        post.delete()
+        return redirect('blogs:blog', blog_id=blog.id)
+    context = {'post':post, 'blog':blog}
+    return render(request, 'blogs/delete_post.html', context)
+    
