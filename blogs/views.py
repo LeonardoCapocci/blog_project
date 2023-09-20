@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from .models import Blog, Post
 from .forms import BlogForm, PostForm
 
@@ -33,7 +34,9 @@ def new_blog(request):
         # POST data submitted; process data.
         form = BlogForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            new_blog = form.save(commit=False)
+            new_blog.owner = request.user
+            new_blog.save()
             return redirect('blogs:blogs')
     
     # Display a blank or invalid form.
@@ -44,6 +47,7 @@ def new_blog(request):
 def new_post(request, blog_id):
     """Add a new post for a particular blog."""
     blog = Blog.objects.get(id=blog_id)
+    check_blog_owner(request, blog)
 
     if request.method != 'POST':
         # No data submitted, create a blank form.
@@ -65,6 +69,7 @@ def edit_post(request, post_id):
     """Edit a particular post."""
     post = Post.objects.get(id=post_id)
     blog = post.blog
+    check_blog_owner(request, blog)
 
     if request.method != 'POST':
         # Initial request; pre-fill form with the current post.
@@ -83,6 +88,7 @@ def edit_post(request, post_id):
 def delete_blog(request, blog_id):
     """Delete a blog."""
     blog = Blog.objects.get(id=blog_id)
+    check_blog_owner(request, blog)
     if request.method == 'POST':
         blog.delete()
         return redirect('blogs:blogs')
@@ -91,11 +97,17 @@ def delete_blog(request, blog_id):
 
 @login_required
 def delete_post(request, post_id):
+    """Delete a post."""
     post = Post.objects.get(id=post_id)
     blog = post.blog
+    check_blog_owner(request, blog)
     if request.method == 'POST':
         post.delete()
         return redirect('blogs:blog', blog_id=blog.id)
     context = {'post':post, 'blog':blog}
     return render(request, 'blogs/delete_post.html', context)
-    
+
+def check_blog_owner(request, blog):
+    """Check if the user is the blog owner."""
+    if blog.owner != request.user:
+        raise Http404
