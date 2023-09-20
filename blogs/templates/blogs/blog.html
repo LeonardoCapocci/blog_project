@@ -2,16 +2,24 @@
 
 {% block content %}
 
-  <p>{{ blog.title }} - 
-    <a href="{% url 'blogs:delete_blog' blog.id %}">Delete blog</a></p>
+  <p>{{ blog.owner }}'s {{ blog.title }}
+    {% if user.is_authenticated and user == blog.owner %}
+       - <a href="{% url 'blogs:delete_blog' blog.id %}">Delete blog</a></p>
+    {% endif %}
   <p>Posts:</p>
-  <p><a href="{% url 'blogs:new_post' blog.id %}">Add new post!</a></p>
+  {% if user.is_authenticated and user == blog.owner %}
+    <p><a href="{% url 'blogs:new_post' blog.id %}">Add new post!</a></p>
+  {% endif %}
   <ul>
     
     {% for post in posts %}
       <li>
-        <p>{{ post.date_added|date:'M d, Y h:i' }} - 
-          <a href="{% url 'blogs:edit_post' post.id %}">Edit post</a></p>
+        <p>{{ post.date_added|date:'M d, Y h:i' }}
+          {% if user.is_authenticated and user == blog.owner %} - 
+            <a href="{% url 'blogs:edit_post' post.id %}">Edit post</a>
+          {% endif %}
+        </p>
+
         <p>{{ post.text|linebreaks }}</p>
       </li>
     {% empty %}
