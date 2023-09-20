@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Blog, Post
 from .forms import BlogForm, PostForm
 
-
 # Create your views here.
 def index(request):
     """The home page for blogs."""
@@ -24,6 +23,7 @@ def blog(request, blog_id):
     context = {'blog':blog, 'posts':posts}
     return render(request, 'blogs/blog.html', context)
 
+@login_required
 def new_blog(request):
     """Add a new blog."""
     if request.method != 'POST':
@@ -40,6 +40,7 @@ def new_blog(request):
     context = {'form': form}
     return render(request, 'blogs/new_blog.html', context)
 
+@login_required
 def new_post(request, blog_id):
     """Add a new post for a particular blog."""
     blog = Blog.objects.get(id=blog_id)
@@ -59,6 +60,7 @@ def new_post(request, blog_id):
     context = {'blog': blog, 'form': form}
     return render(request, 'blogs/new_post.html', context)
 
+@login_required
 def edit_post(request, post_id):
     """Edit a particular post."""
     post = Post.objects.get(id=post_id)
@@ -77,6 +79,7 @@ def edit_post(request, post_id):
     context = {'post':post, 'blog':blog, 'form':form}
     return render(request, 'blogs/edit_post.html', context)
 
+@login_required
 def delete_blog(request, blog_id):
     """Delete a blog."""
     blog = Blog.objects.get(id=blog_id)
@@ -86,6 +89,7 @@ def delete_blog(request, blog_id):
     context = {'blog':blog}
     return render(request, 'blogs/delete_blog.html', context)
 
+@login_required
 def delete_post(request, post_id):
     post = Post.objects.get(id=post_id)
     blog = post.blog
