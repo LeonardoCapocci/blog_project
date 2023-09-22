@@ -1,15 +1,20 @@
 {% extends 'blogs/base.html' %}
+{% load django_bootstrap5 %}
 
 
-{% block content %}
+{% block page_header %}
+  <h3><a href="{% url 'blogs:blog' blog.id %}">{{ blog.title }}</a></h3>
+{% endblock page_header %}
   
-  <p><a href="{% url 'blogs:blog' blog.id %}">{{ blog.title }}</a></p>
-  <p><a href="{% url 'blogs:delete_post' post.id %}">Delete post</a></p>
-  <p>Edit post:</p>
+{% block content %}
+<a class="btn btn-danger" 
+  href="{% url 'blogs:delete_post' post.id %}">Delete post</a>
+  <h6>Edit post:</h6>
   <form action="{% url 'blogs:edit_post' post.id %}" method="post">
     {% csrf_token %}
-    {{ form.as_div }}
-    <button name="submit">Save changes</button>
+    {% bootstrap_form form %}
+    {% bootstrap_button button_type="reset" content="Reset" extra_classes="btn-warning" %}
+    {% bootstrap_button button_type="submit" content="Save changes" extra_classes="btn-success" %}
   </form>
 
 {% endblock content %}

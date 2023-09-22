@@ -1,12 +1,16 @@
 {% extends 'blogs/base.html' %}
 
+
+{% block page_header %}
+  <h3>Delete post</h3>
+{% endblock page_header %}
+
 {% block content %}
-    
-  <p>Delete post:</p>
+
   <p>{{ post.text }}</p>
   <form method="post">
     {% csrf_token %}
-    <button name="delete">DELETE</button>
+    <button name="delete" class="btn btn-danger">DELETE</button>
   </form>
 
 {% endblock content %}

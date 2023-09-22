@@ -1,8 +1,7 @@
 {% extends 'blogs/base.html' %}
 
-
 {% block page_header %}
-  <div class="p-2 mb-4 bg-light border rounded-3">
+  <div class="p-1 mb-4 bg-light border rounded-3">
     <div class="container-fluid py-0">
       <h1 class="display-3">Share your Story</h1>
       <p class="lead">Unleash Your Creativity: Create, Share, Connect - Welcome 
@@ -10,18 +9,18 @@
         blogs and posts with our vibrant community.</p>
       {% if user.is_authenticated %}
       {% else %}
-        <a class="btn btn-primary btn-lg mt-1"
+        <a class="btn btn-primary btn-lg mt-0 mb-1"
           href="{% url 'accounts:login' %}">Log in &raquo;</a>
-        <a class="btn btn-primary btn-lg mt-1"
+        <a class="btn btn-primary btn-lg mt-0 mb-1"
           href="{% url 'accounts:register' %}">Register &raquo;</a>
       {% endif %}
     </div>
   </div>
 {% endblock page_header %}
-  
+
 
 {% block content %}
-  <p>Sorted by most recent</p>
+  <p>Sorted by most recent.</p>
 
     <ul>
       {% for post in posts %}
