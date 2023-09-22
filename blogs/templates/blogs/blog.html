@@ -1,31 +1,35 @@
 {% extends 'blogs/base.html' %}
 
-{% block content %}
 
-  <p>{{ blog.owner }}'s {{ blog.title }}
-    {% if user.is_authenticated and user == blog.owner %}
-       - <a href="{% url 'blogs:delete_blog' blog.id %}">Delete blog</a></p>
-    {% endif %}
-  <p>Posts:</p>
-  {% if user.is_authenticated and user == blog.owner %}
-    <p><a href="{% url 'blogs:new_post' blog.id %}">Add new post!</a></p>
-  {% endif %}
-  <ul>
-    
-    {% for post in posts %}
-      <li>
-        <p>{{ post.date_added|date:'M d, Y h:i' }}
-          {% if user.is_authenticated and user == blog.owner %} - 
-            <a href="{% url 'blogs:edit_post' post.id %}">Edit post</a>
-          {% endif %}
-        </p>
-
-        <p>{{ post.text|linebreaks }}</p>
-      </li>
-    {% empty %}
-      <li>There are 0 posts for this blog.</li>
-    {% endfor %}
-      
-  </ul>
+{% block page_header %}
+  <h1>{{ blog.title }}</h1>
+  <h6>by {{ blog.owner }}</h6>
+{% endblock page_header %}
   
+
+{% block content %}
+    {% if user.is_authenticated and user == blog.owner %}
+      <p><a class="btn btn-primary" 
+        href="{% url 'blogs:new_post' blog.id %}">Add new post</a>
+      <a class="btn btn-danger"
+        href="{% url 'blogs:delete_blog' blog.id %}">Delete blog</a></p>
+    {% endif %}
+
+  <ul>
+    {% for post in posts %}
+      <div class="card mb-3">
+        <!--Card header with timestamp and edit link for owner-->
+        <h6 class="card-header">
+          {{ post.date_added|date:'M d, Y H:i'}} &nbsp;&nbsp;
+          {% if user.is_authenticated and user == blog.owner %}
+          <a class="btn btn-warning btn-sm" 
+          href="{% url 'blogs:edit_post' post.id %}">Edit post</a>
+          {% endif %}
+        </h6>
+        <!--Card body with post text-->
+        <div class="card-body">{{ post.text|linebreaks }}</div>
+      </div>
+    {% empty %}
+      <p>There are 0 posts for this blog.</p>
+    {% endfor %}
 {% endblock content %}

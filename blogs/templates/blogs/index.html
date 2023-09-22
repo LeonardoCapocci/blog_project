@@ -1,11 +1,41 @@
 {% extends 'blogs/base.html' %}
 
+
+{% block page_header %}
+  <div class="p-2 mb-4 bg-light border rounded-3">
+    <div class="container-fluid py-0">
+      <h1 class="display-3">Share your Story</h1>
+      <p class="lead">Unleash Your Creativity: Create, Share, Connect - Welcome 
+        to Blogiverse, where you can effortlessly craft and share your unique 
+        blogs and posts with our vibrant community.</p>
+      {% if user.is_authenticated %}
+      {% else %}
+        <a class="btn btn-primary btn-lg mt-1"
+          href="{% url 'accounts:login' %}">Log in &raquo;</a>
+        <a class="btn btn-primary btn-lg mt-1"
+          href="{% url 'accounts:register' %}">Register &raquo;</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock page_header %}
+  
+
 {% block content %}
-  <p>Blogiverse allows you to blog about specific or very general topics you're 
-  interested in or want to share</p>
-  <p>SORTED BY MOST RECENT</p>
-  {% for post in posts %}
-    <p>[{{post.blog.owner}}] {{ post.blog }} - ({{ post.date_added }})</p>
-    <p>- {{ post }}</p>
-  {% endfor %}
+  <p>Sorted by most recent</p>
+
+    <ul>
+      {% for post in posts %}
+        <div class="card mb-3">
+          <h6 class="card-header">
+              [{{ post.blog.owner }}]
+              <a href="{% url 'blogs:blog' post.blog.id %}">
+                [{{ post.blog.title }}]</a>
+               - ({{ post.date_added|date:'M d, Y H:i'}})
+            </h6>
+            <div class="card-body py-1">{{ post.text|linebreaks }}</div>
+        </div>
+      {% empty %}
+        <p>There are 0 posts.</p>
+      {% endfor %}
+
 {% endblock content %}
