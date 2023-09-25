@@ -8,9 +8,8 @@ from .forms import BlogForm, PostForm
 def index(request):
     """The home page for blogs."""
     posts = Post.objects.order_by('-date_added')
-    for post in posts:
-        blog = post.blog
-    context = {'posts':posts, 'blog':blog}
+    blogs = [post.blog for post in posts]
+    context = {'posts':posts, 'blogs':blogs}
     return render(request, 'blogs/index.html', context)
 
 def blogs(request):
