@@ -23,9 +23,9 @@ disk: 512
 
 # Set a local read/write mount for blogs.
 mounts:
-    "blogs":
+    "blog":
         source: local
-        source_path: blogs
+        source_path: blog
 
 # The hooks executed at various points in the lifecycle of the application.
 hooks:
@@ -34,8 +34,8 @@ hooks:
         pip install -r requirements.txt
         pip install -r requirements_remote.txt
         
-        mkdir blogs
+        mkdir blog
         python manage.py collectstatic
-        rm -rf blogs
+        rm -rf blog
     deploy: |
         python manage.py migrate
