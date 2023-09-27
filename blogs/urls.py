@@ -9,6 +9,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     # Page thats shows all the blogs.
     path('blogs/', views.blogs, name='blogs'),
+    # Page that shows the user all their blogs.
+    path('user_blogs/', views.user_blogs, name='user_blogs'),
     # Page for a specific blog.
     path('blogs/<int:blog_id>/', views.blog, name='blog'),
     # Page for adding a new blog.

@@ -18,6 +18,12 @@ def blogs(request):
     context = {'blogs': blogs}
     return render(request, 'blogs/blogs.html', context)
 
+def user_blogs(request):
+    """The blogs page."""
+    blogs = Blog.objects.order_by('date_added').filter(owner=request.user)
+    context = {'blogs': blogs}
+    return render(request, 'blogs/user_blogs.html', context)
+
 def blog(request, blog_id):
     """Single blog page."""
     blog = Blog.objects.get(id=blog_id)
