@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from .models import Blog, Post
+from .models import Blog, Post, Like
 from .forms import BlogForm, PostForm
 
 # Create your views here.
@@ -90,6 +90,17 @@ def edit_post(request, post_id):
     
     context = {'post':post, 'blog':blog, 'form':form}
     return render(request, 'blogs/edit_post.html', context)
+
+@login_required
+def like_post(request, post_id):
+    """Allows the user to like a post if they are logged in and haven't already 
+    liked the post."""
+    post = Post.objects.get(id=post_id)
+    user = request.user
+    if Like.objects.filter(user=user, post=post).exists():
+        pass
+    else:
+        Like.objects.create(user=user, post=post)
 
 @login_required
 def delete_blog(request, blog_id):

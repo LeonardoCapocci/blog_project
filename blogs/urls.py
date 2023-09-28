@@ -23,4 +23,6 @@ urlpatterns = [
     path('delete_blog/<int:blog_id>/', views.delete_blog, name='delete_blog'),
     # Page for deleting a post.
     path('delete_pos/<post_id>/', views.delete_post, name='delete_post'),
+    # Like post
+    path('like_post/<int:post_id>/', views.like_post, name='like_post'),
 ]
