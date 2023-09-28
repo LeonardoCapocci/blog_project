@@ -22,15 +22,18 @@
 {% block content %}
   <p>Sorted by most recent.</p>
 
-    <ul>
       {% for post in posts %}
         <div class="card mb-3">
-          <h6 class="card-header">
-              [{{ post.blog.owner }}]
+          <h6 class="card-header d-flex justify-content-between align-items-center">
+            [{{ post.blog.owner }}]&nbsp;
               <a href="{% url 'blogs:blog' post.blog.id %}">
-                [{{ post.blog.title }}]</a>
-               - ({{ post.date_added|date:'M d, Y H:i'}})
-            </h6>
+                [{{ post.blog.title }}]</a>&nbsp;- 
+                ({{ post.date_added|date:'M d, Y H:i'}})
+               <span class="ms-auto">
+                <button class="btn btn-sm btn-primary">Like</button>
+                <span class="badge bg-secondary">0 Likes</span>
+              </span>
+          </h6>
             <div class="card-body py-1">{{ post.text|linebreaks }}</div>
         </div>
       {% empty %}
